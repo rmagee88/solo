@@ -1,4 +1,4 @@
-angular.module('criminy.services', []);
+angular.module('criminy.services', [])
 
 .factory('Location', function() {
   // TODO:  converting user's address to location
@@ -12,8 +12,8 @@ angular.module('criminy.services', []);
     var paramsObj = {
       'enddate': endDate,
       'startdate': startDate,
-      'lat': lat,
-      'long': long
+      'lat': 37.791448,//lat,
+      'long': -122.422189//long
     };
 
     var headersObj = {
@@ -22,18 +22,33 @@ angular.module('criminy.services', []);
     };
 
 
-    $http.get(baseUrl, {params:paramsObj}).
+    console.log('factory making call to API...');
+    return $http({method:'GET', url:baseUrl, params:paramsObj, headers:headersObj}).
       success(function(data, status, headers, config) {
         // this callback will be called asynchronously
         // when the response is available
+        console.log('It worked!', data);
+        return data;
       }).
       error(function(data, status, headers, config) {
         // called asynchronously if an error occurs
         // or server returns response with an error status.
+        console.log('It didnt work! Status: ', status)
+        return data;
       });
   };
 
+  var dateFmt = function(dateObj) {
+    var dateArray = [];
+    dateArray.push(dateObj.getMonth() + 1);
+    dateArray.push(dateObj.getDate());
+    dateArray.push(dateObj.getFullYear());
+
+    return dateArray.join('/');
+  };
+
   return {
-    requestData: requestData
+    requestData: requestData,
+    dateFmt: dateFmt
   };
 });

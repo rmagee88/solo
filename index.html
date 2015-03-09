@@ -4,33 +4,40 @@
     <meta charset="utf-8" />
     <title>Criminy App</title>
   </head>
-  <body ng-app="criminy">
+  <body ng-app="criminy" ng-controller="CrimeController">
   <h1>Criminy!</h1>
 
   <form name="requestForm">
-    <button>Use Your Current Location</button><br>
-    Address<input type="text" name="address"><br>
-    City<input type="text" name="address"><br>
-    State<input type="text" name="address"><br>
-    Start Date<input type="date" name="startDate"><br>
-    End Date<input type="date" name="endDate"><br>
-    <button>Get Crime Data</button>
+    <button>Use Your Current Location</button>
+    <button>Use an Address</button>
+    Address (broken)<input type="text" name="address">
+    City (broken)<input type="text" name="address">
+    State (broken)<input type="text" name="address">
+    Start Date<input ng-model="startDate" type="date" name="startDate">
+    End Date<input ng-model="endDate" type="date" name="endDate">
+    <button ng-click="getCrimeData()">Get Crime Data</button>
   </form>
 
   <div>
     <ul>
-      <li>Crime 1 | Location | Date | </li>
-      <li>Crime 2 | Location | Date | </li>
-      <li>Crime 3 | Location | Date | </li>
+      <li ng-repeat="crime in crimes"> {{ crime.description }} | {{ crime.datetime }}</li>
     </ul>
   </div>
   <div>
     MAPPPPP
-    <img src="./assets/placeholder.png"/>
+
+    <!-- <img src="./assets/placeholder.png"/> -->
   </div>
 
   <div ng-view></div>
 
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.12/angular.min.js"></script>
+  <script src="//maps.googleapis.com/maps/api/js?sensor=false"></script>
+  <script src="bower_components/angular/angular.min.js"></script>
+  <script src="bower_components/angular-route/angular-route.min.js"></script>
+  <script src="bower_components/lodash/dist/lodash.min.js"></script>
+  <script src="bower_components/angular-google-maps/dist/angular-google-maps.min.js"></script>
+  <script src="./app/app.js"></script>
+  <script src="./app/controllers/crime.js"></script>
+  <script src="./app/services/services.js"></script>
   </body>
 </html>
