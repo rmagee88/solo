@@ -18,27 +18,36 @@ Once the project moves into development, the press release can be used as a touc
  
 ## Heading ##
   > Name the product in a way the reader (i.e. your target customers) will understand.
+  Criminy
 
 ## Sub-Heading ##
   > Describe who the market for the product is and what benefit they get. One sentence only underneath the title.
+  Keep an eye on crime in your neighborhood.
 
 ## Summary ##
   > Give a summary of the product and the benefit. Assume the reader will not read anything else so make this paragraph good.
+  See crime reports wherever you are and also around your home/business/neighborhood.  Also create alerts to let you know when crimes are committed.  Feel safe knowing you're aware!
 
 ## Problem ##
   > Describe the problem your product solves.
+  No visibility into crime near your home or business.
 
 ## Solution ##
   > Describe how your product elegantly solves the problem.
+  Provides transparency into local gov't crime data, awareness of illegal activity in your area.
 
 ## Quote from You ##
   > A quote from a spokesperson in your company.
+  "This new product makes it so easy to track your neighborhood's incidence of crime"
 
 ## How to Get Started ##
   > Describe how easy it is to get started.
+  Visit [Placeholder/Criminy.com] and enter and use your current location (or enter an address)
 
 ## Customer Quote ##
   > Provide a quote from a hypothetical customer that describes how they experienced the benefit.
+  "I feel much safer knowing what types of crime are going on in my neighborhood"
 
 ## Closing and Call to Action ##
   > Wrap it up and give pointers where the reader should go next.
+  Visit the site now and see what's going on just under your nose!!

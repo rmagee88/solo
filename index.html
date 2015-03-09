@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Criminy App</title>
+  </head>
+  <body ng-app="criminy">
+  <h1>Criminy!</h1>
+
+  <form name="requestForm">
+    <button>Use Your Current Location</button><br>
+    Address<input type="text" name="address"><br>
+    City<input type="text" name="address"><br>
+    State<input type="text" name="address"><br>
+    Start Date<input type="date" name="startDate"><br>
+    End Date<input type="date" name="endDate"><br>
+    <button>Get Crime Data</button>
+  </form>
+
+  <div>
+    <ul>
+      <li>Crime 1 | Location | Date | </li>
+      <li>Crime 2 | Location | Date | </li>
+      <li>Crime 3 | Location | Date | </li>
+    </ul>
+  </div>
+  <div>
+    MAPPPPP
+    <img src="./assets/placeholder.png"/>
+  </div>
+
+  <div ng-view></div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.12/angular.min.js"></script>
+  </body>
+</html>
