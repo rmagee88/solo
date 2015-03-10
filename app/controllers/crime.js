@@ -22,35 +22,42 @@ angular.module('criminy.CrimeController', [])
     zoom: 14,
   };
 
+  // // generic marker settings
+  // $scope.marker = {
+  //   options: {
+  //     labelContent: ' ',
+  //     labelAnchor: "22 0",
+  //     labelClass: "marker-labels"
+  //   }
+  // };
+
+  // images (your location & loading spinner)
   $scope.spinner = 'http://www.dhp11.com/foswiki/pub/Internal/2012-06-12/spinner.gif';
   $scope.mainMarkerImage = 'http://www.adiumxtras.com/images/thumbs/stickman_dock_icons_3215_thumb.png';
 
-  
-
-  // getting last 6 months by default
+  // using moment to get date values (halloween as default)
   var today = moment('2014-11-01');
   var sixMonthsAgo = moment(today).subtract(1, 'days');
   $scope.startDate = sixMonthsAgo.toDate();//sixMonthsAgo.format('MM-DD-YYYY');
   $scope.endDate = today.toDate();//today.format('MM-DD-YYYY');
 
-  $scope.map.markersEvents = {
-          mouseover: function (marker, eventName, model, args) {
-            model.options.labelContent = "Position - lat: " + model.latitude + " lon: " + model.longitude;
-            marker.showWindow = true;
-            $scope.$apply();
-          },
-          mouseout: function (marker, eventName, model, args) {
-             model.options.labelContent = " ";
-             marker.showWindow = false;
-             $scope.$apply();
-          }
-      };
-
-  // users input for address
-  $scope.address;
-
   // returned data from call to API (list of objects)
   $scope.crimes = [];
+
+  // events for the markers (to show their info on mouseover)
+  $scope.map.markersEvents = {
+      mouseover: function (marker, eventName, model, args) {
+        model.options.labelContent = "Description: " + model.description + "Time of Incident: " + model.datetime;
+        model.showWindow = true;
+        // alert(model.options.labelContent);  
+        $scope.$apply();
+      },
+      mouseout: function (marker, eventName, model, args) {
+         model.options.labelContent = " ";
+         model.showWindow = false;
+         $scope.$apply();
+      }
+  };
 
   // called in the controller to get location of user
   $scope.useLocation = function() {
@@ -85,6 +92,11 @@ angular.module('criminy.CrimeController', [])
               res.data.forEach(function(incident) {
                 incident.latitude = incident.lat;
                 incident.longitude = incident.long;
+                incident.options = {
+                  labelContent: ' ',
+                  labelAnchor: "22 0",
+                  labelClass: "marker-labels"
+                };
               });
               console.log($scope.map);
               $scope.showSpinner = false;
@@ -110,6 +122,11 @@ angular.module('criminy.CrimeController', [])
           res.data.forEach(function(incident) {
             incident.latitude = incident.lat;
             incident.longitude = incident.long;
+            incident.options = incident.options = {
+              labelContent: ' ',
+              labelAnchor: "22 0",
+              labelClass: "marker-labels"
+            };
           });
           console.log($scope.map);
           $scope.showSpinner = false;
@@ -125,8 +142,6 @@ angular.module('criminy.CrimeController', [])
 
       });
     }
-
-
     
   };
 

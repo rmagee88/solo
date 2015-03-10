@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Crime-iny App</title>
     <link rel="stylesheet" type="text/css" href="./styles/style.css">
     <script src="//maps.googleapis.com/maps/api/js?sensor=false"></script>
     <script src="bower_components/angular/angular.min.js"></script>
-    <script src="bower_components/angular-route/angular-route.min.js"></script>
     <script src="bower_components/lodash/dist/lodash.min.js"></script>
     <script src="bower_components/angular-google-maps/dist/angular-google-maps.js"></script>
     <script src="bower_components/moment/min/moment.min.js"></script>
@@ -15,13 +15,11 @@
     <script src="./app/controllers/crime.js"></script>
     <script src="./app/services/services.js"></script>
   </head>
-  <body ng-app="criminy" ng-controller="CrimeController">
-  <h1>Crime-iny!</h1>
-
+  <body class="center" ng-app="criminy" ng-controller="CrimeController">
   
-  <button class="form" ng-click="useLocation()">Use Your Current Location</button>
-  <button class="form" ng-click="useAddress()">Use an Address</button>
-
+  <h1>Crime-iny!</h1>
+  <button class="form btn" ng-click="useLocation()">Use Your Current Location</button>
+  <button class="form btn" ng-disabled="showAddr" ng-click="useAddress()">Use an Address</button>
   <h3 ng-show="locationPolling">Please wait... Determining current location (you may need to allow this in your browser, check the top bar)<h3>  
 
   <form name="requestForm">
@@ -38,7 +36,7 @@
       </li>
       <li ng-show="showAddr">
         <label for="address1">Street #</label>
-        <input class="form" ng-required="showAddr" ng-model="addr1" type="text" name="address1" placeholder="1776 Sacramento St">
+        <input class="form" ng-required="showAddr" ng-model="addr1" type="text" name="address1" placeholder="965 Geary St">
         <span class='error' ng-show='!requestForm.address1.$valid && !requestForm.address1.$pristine'>Please a street name and number</span>
       </li>
       <li ng-show="showAddr">
@@ -54,7 +52,7 @@
         End Date<input class="form" ng-model="endDate" type="date" name="endDate" >
       </li>
     </ul>
-    <button class="form" ng-disabled='!requestForm.$valid' ng-click="getCrimeData()">Get Crime Data</button>
+    <button class="form btn" ng-disabled='!requestForm.$valid' ng-click="getCrimeData()">Get Crime Data</button>
   </form>
   <div class="fixed-div" ng-hide="showSpinner">
     <ul>
@@ -68,20 +66,26 @@
     ng-hide="showSpinner"
     center="map.center" 
     zoom="map.zoom"
-    refres="map.refresh">
+    refresh="map.refresh">
     <ui-gmap-markers 
       models="crimes" 
       idKey="id" 
-      labelContent="description" 
+      events="map.markersEvents"
       coords="'self'"
-      doRebuildAll="true">    
+      options="'options'"> <!-- doRebuildAll="true" -->  
+      <!-- <ui-gmap-windows
+        idKey="id"
+        models="crimes"
+        coords="'self'"
+        options='{string}'>
+
+      </ui-gmap-windows> -->
     </ui-gmap-markers>
     <ui-gmap-marker
-            idKey="'center'"
-            coords="{latitude: lat, longitude: long}"
-            options="{labelContent: 'THIS IS YOU'}"
-            icon="mainMarkerImage"
-            >
+      idKey="'center'"
+      coords="{latitude: lat, longitude: long}"
+      options="{labelContent: 'THIS IS YOU'}"
+      icon="mainMarkerImage">
     </ui-gmap-marker>
   </ui-gmap-google-map>
   
