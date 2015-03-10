@@ -3,41 +3,62 @@
   <head>
     <meta charset="utf-8" />
     <title>Criminy App</title>
+    <link rel="stylesheet" type="text/css" href="./styles/style.css">
+    <script src="//maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <script src="bower_components/angular/angular.min.js"></script>
+    <script src="bower_components/angular-route/angular-route.min.js"></script>
+    <script src="bower_components/lodash/dist/lodash.min.js"></script>
+    <script src="bower_components/angular-google-maps/dist/angular-google-maps.js"></script>
+    <script src="./app/app.js"></script>
+    <script src="./app/controllers/crime.js"></script>
+    <script src="./app/services/services.js"></script>
   </head>
   <body ng-app="criminy" ng-controller="CrimeController">
   <h1>Criminy!</h1>
 
-  <form name="requestForm">
-    <button>Use Your Current Location</button>
-    <button>Use an Address</button>
-    Address (broken)<input type="text" name="address">
-    City (broken)<input type="text" name="address">
-    State (broken)<input type="text" name="address">
-    Start Date<input ng-model="startDate" type="date" name="startDate">
-    End Date<input ng-model="endDate" type="date" name="endDate">
-    <button ng-click="getCrimeData()">Get Crime Data</button>
-  </form>
+  
+  <button class="form" ng-click="useLocation()">Use Your Current Location</button>
+  <button class="form" ng-click="useAddress()">Use an Address</button>
 
-  <div>
+  <form name="requestForm">
     <ul>
-      <li ng-repeat="crime in crimes"> {{ crime.description }} | {{ crime.datetime }}</li>
+      <li ng-hide="showAddr">
+        <label for="lat">Latitude</label>
+        <input ng-model="lat" class="form" type="number" name="lat" step="any">
+        <label for="long">Longitude</label>
+        <input ng-model="long" class="form" type="number" name="long" step="any">
+      </li>
+      <li ng-show="showAddr">
+        <input class="form"  type="text" name="address">
+      </li>
+      <li ng-show="showAddr">
+        <input class="form"  type="text" name="address">
+      </li>
+      <li ng-show="showAddr">
+        <input class="form" type="text" name="address">
+      </li>
+      <li>
+        Start Date<input class="form" ng-model="startDate" type="date" name="startDate">
+      </li>
+      <li>
+        End Date<input class="form" ng-model="endDate" type="date" name="endDate">
+      </li>
+    </ul>
+    <button class="form" ng-click="getCrimeData()">Get Crime Data</button>
+  </form>
+  <div class="fixed-div">
+    <ul>
+      <li ng-repeat="crime in crimes"> {{ crime.description }} | {{ crime.datetime }} | {{ crime.longitude }}</li>
     </ul>
   </div>
-  <div>
-    MAPPPPP
-
-    <!-- <img src="./assets/placeholder.png"/> -->
-  </div>
-
-  <div ng-view></div>
-
-  <script src="//maps.googleapis.com/maps/api/js?sensor=false"></script>
-  <script src="bower_components/angular/angular.min.js"></script>
-  <script src="bower_components/angular-route/angular-route.min.js"></script>
-  <script src="bower_components/lodash/dist/lodash.min.js"></script>
-  <script src="bower_components/angular-google-maps/dist/angular-google-maps.min.js"></script>
-  <script src="./app/app.js"></script>
-  <script src="./app/controllers/crime.js"></script>
-  <script src="./app/services/services.js"></script>
+  <br><br>  
+  <!-- <div class="map-container">
+  </div> -->
+  <ui-gmap-google-map ng-if="crimes.length" center="map.center" zoom="map.zoom">
+    <ui-gmap-markers models="crimes" idKey="id" labelContent="description" coords="'self'">    
+    </ui-gmap-markers>
+  </ui-gmap-google-map>
+  
+  
   </body>
 </html>

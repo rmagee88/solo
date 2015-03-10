@@ -1,0 +1,12 @@
+h1 {
+  font-weight:bold;
+}
+
+.angular-google-map-container { 
+  height: 400px; 
+}
+
+.fixed-div {
+  height: 100px;
+  overflow:scroll;
+}

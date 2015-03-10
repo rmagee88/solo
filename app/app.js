@@ -1,8 +1,24 @@
 angular.module('criminy', [
     'criminy.services',
     'criminy.CrimeController',
-    'ngRoute'
+    'ngRoute',
+    'uiGmapgoogle-maps'
 ]);
+// .config(['uiGmapGoogleMapApiProvider', function (GoogleMapApi) {
+//   GoogleMapApi.configure({
+// //    key: 'your api key',
+//     v: '3.17',
+//     libraries: 'weather,geometry,visualization'
+//   });
+// }]);
+
+// .config(function(uiGmapGoogleMapApiProvider) {
+//     uiGmapGoogleMapApiProvider.configure({
+//         key: 'AIzaSyCSGkNggzz_E_VxcTWnFjwQNCWUDImls7M',
+//         v: '3.17',
+//         libraries: 'weather,geometry,visualization'
+//     });
+// });
 
 // angular.module('shortly', [
 //   'shortly.services',
