@@ -1,17 +1,46 @@
 angular.module('criminy.services', [])
 
-.factory('Location', function() {
+.factory('Location', function($http, $q) {
   // TODO:  converting user's address to location
+  var resolveAddress = function(addr1, addr2) {
+    var baseUrl = 'https://yurisw-address-correction-and-geocoding.p.mashape.com/address';
+    var paramsObj = {
+      'AddressLine1': addr1,
+      'AddressLine2': addr2
+    };
+    var headersObj = {
+      'X-Mashape-Key': 'YtoZWVOpjVmsh40iJ2tKGREGQ2cXp1xyN7Ijsnm1IYPc4YiZMh',
+      'Accept': 'application/json'
+    };
+
+    return $http({method:'GET', url:baseUrl, params:paramsObj, headers:headersObj}).
+      success(function(data, status, headers, config) {
+        // this callback will be called asynchronously
+        // when the response is available
+        console.log('Address Resolution Worked!', data);
+        return data;
+      }).
+      error(function(data, status, headers, config) {
+        // called asynchronously if an error occurs
+        // or server returns response with an error status.
+        console.log('Address Resolution didnt work! Status: ', status)
+        return data;
+      });
+
+  };
+
+  return {
+    resolveAddress: resolveAddress
+  };
 })
 
 .factory('Crime', function($http, $q) {
   // getting crime data from https://www.mashape.com/jgentes/crime-data api
-
   var requestData = function(lat, long, startDate, endDate) {
     var baseUrl = 'https://jgentes-Crime-Data-v1.p.mashape.com/crime';
     var paramsObj = {
-      'enddate': endDate,
-      'startdate': startDate,
+      'enddate': endDate.format('MM-DD-YYYY'),
+      'startdate': startDate.format('MM-DD-YYYY'),
       'lat': lat,
       'long': long
     };
@@ -23,6 +52,10 @@ angular.module('criminy.services', [])
 
 
     console.log('factory making call to API...');
+    console.log('lat: ', lat);
+    console.log('long: ', long);
+    console.log('startDate: ', startDate);
+    console.log('endDate: ', endDate)
     return $http({method:'GET', url:baseUrl, params:paramsObj, headers:headersObj}).
       success(function(data, status, headers, config) {
         // this callback will be called asynchronously
@@ -38,30 +71,6 @@ angular.module('criminy.services', [])
       });
   };
 
-  // var insertMap = function() {
-  //   var map = angular.element(document.createElement('ui-gmap-google-map'));
-  //   var markers = angular.element(document.createElement('ui-gmap-markers'));
-
-
-
-
-  // <!-- <ui-gmap-google-map ng-show="crimes" center="map.center" zoom="map.zoom">
-  //   <ui-gmap-markers models="crimes" idKey="id" labelContent="description" coords="'self'">    
-  //   </ui-gmap-markers>
-  // </ui-gmap-google-map> -->
-
-
-  // };
-
-  var dateFmt = function(dateObj) {
-    var dateArray = [];
-    dateArray.push(dateObj.getMonth() + 1);
-    dateArray.push(dateObj.getDate());
-    dateArray.push(dateObj.getFullYear());
-
-    return dateArray.join('/');
-  };
-
   var getLocation = function() {  
       var deferred = $q.defer();
       navigator.geolocation.getCurrentPosition(
@@ -74,7 +83,6 @@ angular.module('criminy.services', [])
 
   return {
     requestData: requestData,
-    dateFmt: dateFmt,
     getLocation: getLocation
   };
 });

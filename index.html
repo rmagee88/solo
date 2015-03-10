@@ -2,61 +2,87 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Criminy App</title>
+    <title>Crime-iny App</title>
     <link rel="stylesheet" type="text/css" href="./styles/style.css">
     <script src="//maps.googleapis.com/maps/api/js?sensor=false"></script>
     <script src="bower_components/angular/angular.min.js"></script>
     <script src="bower_components/angular-route/angular-route.min.js"></script>
     <script src="bower_components/lodash/dist/lodash.min.js"></script>
     <script src="bower_components/angular-google-maps/dist/angular-google-maps.js"></script>
+    <script src="bower_components/moment/min/moment.min.js"></script>
+    <script src="bower_components/angular-moment/angular-moment.min.js"></script>
     <script src="./app/app.js"></script>
     <script src="./app/controllers/crime.js"></script>
     <script src="./app/services/services.js"></script>
   </head>
   <body ng-app="criminy" ng-controller="CrimeController">
-  <h1>Criminy!</h1>
+  <h1>Crime-iny!</h1>
 
   
   <button class="form" ng-click="useLocation()">Use Your Current Location</button>
   <button class="form" ng-click="useAddress()">Use an Address</button>
 
+  <h3 ng-show="locationPolling">Please wait... Determining current location (you may need to allow this in your browser, check the top bar)<h3>  
+
   <form name="requestForm">
     <ul>
       <li ng-hide="showAddr">
         <label for="lat">Latitude</label>
-        <input ng-model="lat" class="form" type="number" name="lat" step="any">
+        <input ng-model="lat" ng-disabled="locationPolling" ng-required="!showAddr" class="form" type="number" name="lat" step="any">
+        <span class='error' ng-show='!requestForm.lat.$valid && !requestForm.lat.$pristine'>Please enter a latitude</span>
+      </li>
+      <li ng-hide="showAddr">
         <label for="long">Longitude</label>
-        <input ng-model="long" class="form" type="number" name="long" step="any">
+        <input ng-model="long" ng-disabled="locationPolling" ng-required="!showAddr" class="form" type="number" name="long" step="any">
+        <span class='error' ng-show='!requestForm.long.$valid && !requestForm.long.$pristine'>Please enter a longitude</span>
       </li>
       <li ng-show="showAddr">
-        <input class="form"  type="text" name="address">
+        <label for="address1">Street #</label>
+        <input class="form" ng-required="showAddr" ng-model="addr1" type="text" name="address1" placeholder="1776 Sacramento St">
+        <span class='error' ng-show='!requestForm.address1.$valid && !requestForm.address1.$pristine'>Please a street name and number</span>
       </li>
       <li ng-show="showAddr">
-        <input class="form"  type="text" name="address">
+        <label for="address2">City, State</label>
+        <input class="form" ng-required="showAddr" ng-model="addr2" type="text" name="address2" placeholder="San Francisco, CA">
+        <span class='error' ng-show='!requestForm.address2.$valid && !requestForm.address2.$pristine'>Please a street name and number</span>
       </li>
-      <li ng-show="showAddr">
-        <input class="form" type="text" name="address">
+      <br><br>
+      <li>
+        Start Date<input class="form" ng-model="startDate" type="date" name="startDate" >
       </li>
       <li>
-        Start Date<input class="form" ng-model="startDate" type="date" name="startDate">
-      </li>
-      <li>
-        End Date<input class="form" ng-model="endDate" type="date" name="endDate">
+        End Date<input class="form" ng-model="endDate" type="date" name="endDate" >
       </li>
     </ul>
-    <button class="form" ng-click="getCrimeData()">Get Crime Data</button>
+    <button class="form" ng-disabled='!requestForm.$valid' ng-click="getCrimeData()">Get Crime Data</button>
   </form>
-  <div class="fixed-div">
+  <div class="fixed-div" ng-hide="showSpinner">
     <ul>
-      <li ng-repeat="crime in crimes"> {{ crime.description }} | {{ crime.datetime }} | {{ crime.longitude }}</li>
+      <li ng-repeat="crime in crimes | orderBy:'crime.datetime':true"> {{ crime.description }} | {{ crime.datetime }} | {{ crime.lat }} | {{ crime.long }}</li>
     </ul>
   </div>
-  <br><br>  
-  <!-- <div class="map-container">
-  </div> -->
-  <ui-gmap-google-map ng-if="crimes.length" center="map.center" zoom="map.zoom">
-    <ui-gmap-markers models="crimes" idKey="id" labelContent="description" coords="'self'">    
+  <br> 
+  <img ng-show="showSpinner" ng-src="{{ spinner }}" alt="loading spinner...">
+  <ui-gmap-google-map 
+    ng-if="crimes.length" 
+    ng-hide="showSpinner"
+    center="map.center" 
+    zoom="map.zoom"
+    refres="map.refresh">
+    <ui-gmap-markers 
+      models="crimes" 
+      idKey="id" 
+      labelContent="description" 
+      coords="'self'"
+      doRebuildAll="true">    
     </ui-gmap-markers>
+    <ui-gmap-marker
+            idKey="'center'"
+            coords="{latitude: lat, longitude: long}"
+            options="{labelContent: 'THIS IS YOU'}"
+            icon="mainMarkerImage"
+            >
+    </ui-gmap-marker>
   </ui-gmap-google-map>
   
   
