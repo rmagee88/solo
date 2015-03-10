@@ -18,45 +18,51 @@
   <body class="center" ng-app="criminy" ng-controller="CrimeController">
   
   <h1>Crime-iny!</h1>
-  <button class="form btn" ng-click="useLocation()">Use Your Current Location</button>
+  <button class="form btn" ng-click="useLocation()">Use Your Current Location</button> | 
   <button class="form btn" ng-disabled="showAddr" ng-click="useAddress()">Use an Address</button>
-  <h3 ng-show="locationPolling">Please wait... Determining current location (you may need to allow this in your browser, check the top bar)<h3>  
+  <h3 class="notify" ng-show="locationPolling">Please wait... Determining current location (you may need to allow this in your browser, check the top bar)</h3>  
 
-  <form name="requestForm">
+  <form class="form" name="requestForm">
     <ul>
-      <li ng-hide="showAddr">
+      <li class="lat" ng-hide="showAddr">
         <label for="lat">Latitude</label>
-        <input ng-model="lat" ng-disabled="locationPolling" ng-required="!showAddr" class="form" type="number" name="lat" step="any">
+        <input ng-model="lat" ng-disabled="locationPolling" ng-required="!showAddr" class="form" type="number" name="lat" step="any" placeholder="Loading...">
         <span class='error' ng-show='!requestForm.lat.$valid && !requestForm.lat.$pristine'>Please enter a latitude</span>
       </li>
-      <li ng-hide="showAddr">
+      <li class="long" ng-hide="showAddr">
         <label for="long">Longitude</label>
-        <input ng-model="long" ng-disabled="locationPolling" ng-required="!showAddr" class="form" type="number" name="long" step="any">
+        <input ng-model="long" ng-disabled="locationPolling" ng-required="!showAddr" class="form" type="number" name="long" step="any" placeholder="Loading...">
         <span class='error' ng-show='!requestForm.long.$valid && !requestForm.long.$pristine'>Please enter a longitude</span>
       </li>
-      <li ng-show="showAddr">
+      <li class="addr1" ng-show="showAddr">
         <label for="address1">Street #</label>
         <input class="form" ng-required="showAddr" ng-model="addr1" type="text" name="address1" placeholder="965 Geary St">
         <span class='error' ng-show='!requestForm.address1.$valid && !requestForm.address1.$pristine'>Please a street name and number</span>
       </li>
-      <li ng-show="showAddr">
+      <li class="addr2" ng-show="showAddr">
         <label for="address2">City, State</label>
         <input class="form" ng-required="showAddr" ng-model="addr2" type="text" name="address2" placeholder="San Francisco, CA">
         <span class='error' ng-show='!requestForm.address2.$valid && !requestForm.address2.$pristine'>Please a street name and number</span>
       </li>
-      <br><br>
-      <li>
-        Start Date<input class="form" ng-model="startDate" type="date" name="startDate" >
+      <br>
+      <li class="date1">
+        <label for="startDate">Start Date</label>
+        <input class="form" ng-model="startDate" type="date" name="startDate" >
       </li>
-      <li>
-        End Date<input class="form" ng-model="endDate" type="date" name="endDate" >
+      <li class="date2">
+        <label for="endDate">End Date</label>
+        <input class="form" ng-model="endDate" type="date" name="endDate" >
       </li>
     </ul>
+    <br>
     <button class="form btn" ng-disabled='!requestForm.$valid' ng-click="getCrimeData()">Get Crime Data</button>
   </form>
-  <div class="fixed-div" ng-hide="showSpinner">
+  <div class="fixed-div" ng-if="crimes.length" ng-hide="showSpinner">
     <ul>
-      <li ng-repeat="crime in crimes | orderBy:'crime.datetime':true"> {{ crime.description }} | {{ crime.datetime }} | {{ crime.lat }} | {{ crime.long }}</li>
+      <li ng-repeat="crime in crimes | orderBy:'crime.datetime':true"> 
+        <span class="desc">{{ crime.description }}</span><br>
+        <span class="datetime">{{ crime.datetime }}</span>
+      </li>
     </ul>
   </div>
   <br> 
@@ -72,14 +78,7 @@
       idKey="id" 
       events="map.markersEvents"
       coords="'self'"
-      options="'options'"> <!-- doRebuildAll="true" -->  
-      <!-- <ui-gmap-windows
-        idKey="id"
-        models="crimes"
-        coords="'self'"
-        options='{string}'>
-
-      </ui-gmap-windows> -->
+      options="'options'"> 
     </ui-gmap-markers>
     <ui-gmap-marker
       idKey="'center'"

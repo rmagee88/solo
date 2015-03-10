@@ -19,20 +19,11 @@ angular.module('criminy.CrimeController', [])
       latitude: $scope.lat, 
       longitude: $scope.long 
     }, 
-    zoom: 14,
+    zoom: 12,
   };
 
-  // // generic marker settings
-  // $scope.marker = {
-  //   options: {
-  //     labelContent: ' ',
-  //     labelAnchor: "22 0",
-  //     labelClass: "marker-labels"
-  //   }
-  // };
-
   // images (your location & loading spinner)
-  $scope.spinner = 'http://www.dhp11.com/foswiki/pub/Internal/2012-06-12/spinner.gif';
+  $scope.spinner = 'http://www.angelgioielli.com/catalog/view/javascript/jquery/pitstop/pitstop/res/wait_1.gif';
   $scope.mainMarkerImage = 'http://www.adiumxtras.com/images/thumbs/stickman_dock_icons_3215_thumb.png';
 
   // using moment to get date values (halloween as default)
@@ -47,7 +38,7 @@ angular.module('criminy.CrimeController', [])
   // events for the markers (to show their info on mouseover)
   $scope.map.markersEvents = {
       mouseover: function (marker, eventName, model, args) {
-        model.options.labelContent = "Description: " + model.description + "Time of Incident: " + model.datetime;
+        model.options.labelContent = "Description: " + model.description + "  |  Time of Incident: " + model.datetime;
         model.showWindow = true;
         // alert(model.options.labelContent);  
         $scope.$apply();
